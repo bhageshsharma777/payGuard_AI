@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PayGuard AI | Risk Intelligence</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-icon">⬡</span><span>PayGuard <b>AI</b></span></div>
+    <div class="nav-label">WORKSPACE</div>
+    <a class="nav active" href="#overview">▦ &nbsp; Overview</a>
+    <a class="nav" href="#transactions">▤ &nbsp; Transactions</a>
+    <a class="nav" href="#analyze">◎ &nbsp; Analyze transaction</a>
+    <a class="nav" href="#payments">↗ &nbsp; PayPal Sandbox</a>
+    <div class="sidebar-bottom"><span class="status-dot"></span> Demo environment</div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div><div class="eyebrow">PAYMENT SECURITY / OVERVIEW</div><h1>Risk intelligence</h1><p class="muted">Monitor transaction risk and investigate suspicious activity.</p></div>
+      <div class="top-actions"><span class="pill"><span class="status-dot"></span> Sandbox-ready</span><button class="button button-secondary" onclick="refreshAll()">↻ Refresh</button></div>
+    </header>
+    <section id="overview" class="stats-grid">
+      <article class="stat-card"><div class="stat-label">Transactions analyzed</div><div id="stat-total" class="stat-number">—</div><div class="stat-foot">Stored assessments</div></article>
+      <article class="stat-card"><div class="stat-label">High-risk alerts</div><div id="stat-high" class="stat-number">—</div><div class="stat-foot">Requires investigation</div></article>
+      <article class="stat-card"><div class="stat-label">Pending reviews</div><div id="stat-pending" class="stat-number">—</div><div class="stat-foot">Human review queue</div></article>
+      <article class="stat-card"><div class="stat-label">Model status</div><div id="stat-model" class="stat-number status-text">Checking</div><div id="model-foot" class="stat-foot">Health endpoint</div></article>
+    </section>
+    <section class="content-grid">
+      <article class="panel">
+        <div class="panel-heading"><div><h2>Analyze a transaction</h2><p class="muted">Enter the required model features.</p></div><span class="tag">ML ENGINE</span></div>
+        <form id="score-form" class="form-grid">
+          <label>Transaction amount (USD)<input name="Amount" type="number" min="0" step="0.01" placeholder="125.00" required></label>
+          <label>Time (seconds from dataset start)<input name="Time" type="number" min="0" step="1" placeholder="3600" required></label>
+          <button class="button button-primary full" type="submit">Analyze risk <span>→</span></button>
+        </form>
+        <div id="score-result" class="result-box empty">Your risk assessment will appear here.</div>
+      </article>
+      <article class="panel">
+        <div class="panel-heading"><div><h2>Risk distribution</h2><p class="muted">Based on stored model assessments.</p></div></div>
+        <div class="chart-wrap"><canvas id="risk-chart"></canvas></div>
+        <div class="legend-note">Demo data only. Model scores are estimates, not proof of fraud.</div>
+      </article>
+    </section>
+    <section id="transactions" class="panel table-panel">
+      <div class="panel-heading"><div><h2>Recent transactions</h2><p class="muted">Select a record to inspect its assessment.</p></div><span class="tag">LATEST 100</span></div>
+      <div class="table-wrap"><table><thead><tr><th>ID</th><th>Created</th><th>Amount</th><th>Risk score</th><th>Risk level</th><th>Review</th><th>Details</th></tr></thead><tbody id="transaction-rows"><tr><td colspan="7" class="muted">Loading records…</td></tr></tbody></table></div>
+    </section>
+    <section id="analyze" class="panel">
+      <div class="panel-heading"><div><h2>Batch CSV analysis</h2><p class="muted">CSV must include numeric <code>Time</code> and <code>Amount</code> columns.</p></div></div>
+      <form id="csv-form" class="upload-row"><input type="file" name="file" accept=".csv" required><button class="button button-secondary" type="submit">Score CSV & download</button></form>
+      <p id="csv-message" class="muted small"></p>
+    </section>
+    <section id="payments" class="panel">
+      <div class="panel-heading"><div><h2>PayPal Sandbox</h2><p class="muted">Create a $10 USD test order. Credentials are configured on the server.</p></div><span class="tag">TEST MODE</span></div>
+      <div class="payment-row"><div><div class="payment-title">Sandbox order</div><p class="muted small">This demo uses a fixed amount calculated server-side.</p><p id="paypal-status" class="small muted">Checking PayPal configuration…</p></div><button id="create-order" class="button button-primary">Create test order</button></div>
+      <div id="paypal-result" class="result-box empty">Order status will appear here.</div>
+      <p class="small muted">Payment capture is not automatic. This prototype requires explicit review approval and should only be used with Sandbox credentials.</p>
+    </section>
+    <footer>PayGuard AI · Hackathon prototype · Not a production fraud system</footer>
+  </main>
+  <div id="detail-modal" class="modal hidden"><div class="modal-card"><button class="modal-close" onclick="closeModal()">×</button><div id="detail-content"></div></div></div>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
